@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTokenContext } from '@/context/TokenContext'
-import { ChevronDown, BookOpen, Video, Zap, GraduationCap, PlayCircle } from 'lucide-react'
+import { ChevronDown, BookOpen, Video, Zap, GraduationCap, PlayCircle, Menu, X } from 'lucide-react'
 
 interface HeaderProps {
   lightBackground?: boolean
@@ -13,6 +13,15 @@ export function Header({ lightBackground = false }: HeaderProps) {
   const { tokenBalance } = useTokenContext()
   const [scrolled, setScrolled] = useState(false)
   const [resourcesOpen, setResourcesOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+  }, [mobileMenuOpen])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,8 +36,8 @@ export function Header({ lightBackground = false }: HeaderProps) {
   return (
     <header
       className={`fixed top-0 left-1/2 z-50 transition-all duration-700 ease-out ${scrolled
-        ? 'w-[98%] max-w-[1400px] mt-4 px-8 py-4 bg-white/70 backdrop-blur-3xl shadow-[0_8px_40px_rgba(0,0,0,0.15)] border-2 border-white/60 rounded-full transform -translate-x-1/2'
-        : 'w-full px-8 py-5 bg-transparent backdrop-blur-none border-2 border-transparent transform -translate-x-1/2 translate-y-0'
+        ? 'w-full md:w-[98%] md:max-w-[1400px] mt-0 md:mt-4 px-6 md:px-8 py-4 bg-white/70 backdrop-blur-3xl shadow-[0_8px_40px_rgba(0,0,0,0.15)] border-b md:border-2 border-white/60 md:rounded-full rounded-none transform -translate-x-1/2'
+        : 'w-full px-6 md:px-8 py-5 bg-transparent backdrop-blur-none border-b md:border-2 border-transparent transform -translate-x-1/2 translate-y-0'
         }`}
       style={{
         transform: scrolled
@@ -192,6 +201,110 @@ export function Header({ lightBackground = false }: HeaderProps) {
             <button className="px-7 py-3 rounded-full font-poppins font-medium text-base bg-[#2C2C2C] text-white hover:bg-[#3C3C3C] transition-all duration-300 shadow-sm">
               Create Poster
             </button>
+          </Link>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden p-2 text-current z-50 ml-2"
+            onClick={() => setMobileMenuOpen(true)}
+          >
+            <Menu className={`w-8 h-8 ${scrolled || lightBackground ? 'text-[#1A1A1A]' : 'text-white'}`} />
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      <div
+        className={`fixed inset-0 bg-white/90 backdrop-blur-3xl z-[100] transition-transform duration-300 ease-in-out md:hidden flex flex-col ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+      >
+        <div className="flex items-center justify-between p-6 border-b border-gray-100">
+          <span className="font-clash-display text-2xl font-semibold text-[#1A1A1A]">
+            Beexel Posters
+          </span>
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            className="p-2 -mr-2 text-[#1A1A1A]"
+          >
+            <X className="w-8 h-8" />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto py-6 px-6 flex flex-col gap-6">
+          <Link
+            href="/features"
+            onClick={() => setMobileMenuOpen(false)}
+            className="text-2xl font-poppins font-medium text-[#1A1A1A]"
+          >
+            Features
+          </Link>
+          <Link
+            href="/about"
+            onClick={() => setMobileMenuOpen(false)}
+            className="text-2xl font-poppins font-medium text-[#1A1A1A]"
+          >
+            About
+          </Link>
+          <Link
+            href="/pricing"
+            onClick={() => setMobileMenuOpen(false)}
+            className="text-2xl font-poppins font-medium text-[#1A1A1A]"
+          >
+            Pricing
+          </Link>
+
+          {/* Mobile Resources Accordion */}
+          <div>
+            <button
+              onClick={() => setResourcesOpen(!resourcesOpen)}
+              className="flex items-center justify-between w-full text-2xl font-poppins font-medium text-[#1A1A1A]"
+            >
+              Resources
+              <ChevronDown className={`w-6 h-6 transition-transform duration-300 ${resourcesOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            <div className={`grid transition-all duration-300 ease-in-out overflow-hidden ${resourcesOpen ? 'grid-rows-[1fr] mt-4 opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+              <div className="min-h-0 flex flex-col gap-4 pl-4 border-l-2 border-gray-100">
+                <Link
+                  href="/render"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 py-1"
+                >
+                  <div className="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center text-orange-500">
+                    <Zap className="w-4 h-4" />
+                  </div>
+                  <span className="text-lg text-gray-600 font-medium">Generate</span>
+                </Link>
+                <Link
+                  href="/resources/help"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 py-1"
+                >
+                  <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-500">
+                    <BookOpen className="w-4 h-4" />
+                  </div>
+                  <span className="text-lg text-gray-600 font-medium">Help Center</span>
+                </Link>
+                <Link
+                  href="/resources/faq"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 py-1"
+                >
+                  <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center text-purple-500">
+                    <GraduationCap className="w-4 h-4" />
+                  </div>
+                  <span className="text-lg text-gray-600 font-medium">FAQ</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <Link
+            href="/contact"
+            onClick={() => setMobileMenuOpen(false)}
+            className="text-2xl font-poppins font-medium text-[#1A1A1A]"
+          >
+            Contact Us
           </Link>
         </div>
       </div>

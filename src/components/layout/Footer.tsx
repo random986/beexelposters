@@ -81,7 +81,7 @@ export function Footer() {
             © {currentYear} Beexel AI. All rights reserved.
           </p>
           <a href="https://websites.beexelgraphics.com/" target="_blank" rel="noopener noreferrer" className="text-sm text-[#9B9B98] flex items-center gap-1 hover:text-[#1A1A1A] transition-colors">
-            Built by Beexel. Made with <span className="text-red-500">♥</span> in Nairobi by Beexel
+            Built by Beexel
           </a>
         </div>
 

@@ -132,8 +132,8 @@ export function SelectedProjects() {
                                 ref={el => { itemRefs.current[idx] = el }}
                                 data-id={project.id}
                                 className={`py-12 pl-6 border-l-2 transition-all duration-500 cursor-pointer ${activeId === project.id
-                                        ? 'border-[#1A1A1A] opacity-100'
-                                        : 'border-transparent opacity-40 hover:opacity-70'
+                                    ? 'border-[#1A1A1A] opacity-100'
+                                    : 'border-transparent opacity-40 hover:opacity-70'
                                     }`}
                                 onClick={() => {
                                     document.getElementById(`project-${project.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -151,6 +151,16 @@ export function SelectedProjects() {
                                     }`}>
                                     {project.description}
                                 </p>
+
+                                {/* Mobile Image Preview */}
+                                <div className={`lg:hidden mt-6 rounded-2xl overflow-hidden shadow-lg transition-all duration-500 ${activeId === project.id ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                                    }`}>
+                                    <img
+                                        src={project.image}
+                                        alt={project.title}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
                             </div>
                         ))}
                     </div>
