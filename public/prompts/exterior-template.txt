@@ -1,0 +1,15 @@
+A high-fidelity architectural exterior rendering of [DESCRIPTION]. The scene features [MATERIALS] with [LIGHTING] lighting. The architecture showcases [ARCHITECTURAL_STYLE] style with clean lines and modern proportions. 
+
+Fidelity Requirements:
+- Preserve the exact camera angle, geometry, and image dimensions
+- NO_ZOOM, NO_TILT, NO_CROP, MAINTAIN_RESOLUTION
+- Midday neutral lighting, no yellow tint
+- Remove all 3D software guide lines and artifacts (orange, green, blue, black outlines)
+- Black picture frames around windows
+- Wooden or painted door with appropriate color
+- Tiled or metal sheet roof with realistic texture
+- [TREE_GROUP] trees visible in the landscape
+- Realistic materials: concrete, glass, metal, vegetation
+- High resolution, photorealistic quality
+- Architectural photography style
+

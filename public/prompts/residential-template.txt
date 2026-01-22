@@ -1,0 +1,16 @@
+A photorealistic residential home exterior showing a [HOME_STYLE] house with [ARCHITECTURAL_DETAILS]. The property features [PROPERTY_FEATURES] in a [LOCATION_TYPE] setting.
+
+Fidelity Requirements:
+- Preserve the exact camera angle, geometry, and image dimensions
+- NO_ZOOM, NO_TILT, NO_CROP, MAINTAIN_RESOLUTION
+- Midday neutral lighting, no color bias
+- Remove all 3D software guide lines and artifacts (orange, green, blue, black outlines)
+- Black window frames
+- Wooden or metal door with appropriate finish
+- Tiled or metal sheet roof with realistic texture
+- [TREE_GROUP] surrounding the property
+- Realistic landscape and hardscaping
+- Accurate proportions and scale
+- High resolution, photorealistic quality
+- Residential architecture photography
+

@@ -1,0 +1,939 @@
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 47% 11%;
+    --foreground: 0 0% 100%;
+    --primary: 195 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 222 47% 20%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 222 47% 15%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 195 100% 45%;
+    --accent-foreground: 0 0% 100%;
+    --border: 222 47% 25%;
+    --input: 222 47% 15%;
+    --ring: 195 100% 50%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-[#0a0e27] text-foreground;
+    font-family: 'Clash Display', 'Poppins', sans-serif !important;
+  }
+}
+
+
+
+
+
+@layer utilities {
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+  }
+
+  .glass-strong {
+    @apply bg-white/10 backdrop-blur-xl border border-white/20;
+  }
+
+  .glow {
+    box-shadow: 0 0 20px rgba(0, 195, 255, 0.3);
+  }
+
+  .glow-strong {
+    box-shadow: 0 0 40px rgba(0, 195, 255, 0.5);
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-cyan-400 via-blue-400 to-cyan-300 bg-clip-text text-transparent;
+  }
+
+  .gradient-border {
+    @apply relative;
+  }
+
+  .gradient-border::before {
+    content: '';
+    @apply absolute inset-0 rounded-lg;
+    background: linear-gradient(135deg, rgba(0, 195, 255, 0.3), rgba(59, 130, 246, 0.3));
+    padding: 1px;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  .fire-border {
+    @apply relative overflow-visible rounded-lg;
+    padding: 4px;
+  }
+
+  /* Animated border - blue fire traveling around perimeter */
+  .fire-border::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: inherit;
+    z-index: 1;
+    padding: 4px;
+    background: conic-gradient(from 0deg,
+        transparent 0deg,
+        transparent 340deg,
+        rgba(34, 211, 238, 0.5) 345deg,
+        rgba(59, 130, 246, 0.8) 350deg,
+        rgba(96, 165, 250, 1) 355deg,
+        rgba(147, 197, 253, 1) 360deg,
+        rgba(96, 165, 250, 1) 365deg,
+        rgba(59, 130, 246, 0.8) 370deg,
+        rgba(34, 211, 238, 0.5) 375deg,
+        transparent 380deg,
+        transparent 360deg);
+    background-size: 200% 200%;
+    background-position: 50% 50%;
+    animation: fire-perimeter 2.5s linear infinite;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+  }
+
+  /* Glow layer */
+  .fire-border::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: inherit;
+    z-index: 0;
+    padding: 6px;
+    background: conic-gradient(from 180deg,
+        transparent 0deg,
+        transparent 340deg,
+        rgba(34, 211, 238, 0.3) 345deg,
+        rgba(59, 130, 246, 0.6) 350deg,
+        rgba(96, 165, 250, 0.9) 355deg,
+        rgba(147, 197, 253, 0.95) 360deg,
+        rgba(96, 165, 250, 0.9) 365deg,
+        rgba(59, 130, 246, 0.6) 370deg,
+        rgba(34, 211, 238, 0.3) 375deg,
+        transparent 380deg,
+        transparent 360deg);
+    background-size: 200% 200%;
+    background-position: 50% 50%;
+    animation: fire-perimeter 3s linear infinite reverse;
+    filter: blur(10px);
+    opacity: 0.7;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+  }
+
+  .fire-border>* {
+    position: relative;
+    z-index: 2;
+    border-radius: inherit;
+  }
+}
+
+/* Smooth animations */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes glow-pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes gradient-shift {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes fire-perimeter {
+  0% {
+    background-position: 0% 0%;
+  }
+
+  25% {
+    background-position: 100% 0%;
+  }
+
+  50% {
+    background-position: 100% 100%;
+  }
+
+  75% {
+    background-position: 0% 100%;
+  }
+
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+/* Animated border wrapper for result images - subtle glowing border effect */
+.animated-border-wrapper {
+  position: relative;
+  z-index: 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  padding: 3px;
+  background: linear-gradient(135deg, #06b6d4, #3b82f6, #06b6d4);
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+.animated-border-wrapper>* {
+  border-radius: calc(0.75rem - 3px);
+  background: #0e1330;
+}
+
+/* Continuous seamless rotation - very slow and smooth */
+@keyframes rotate-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Slow pulsing glow effect - ensures continuous visibility */
+@keyframes glow-pulse-slow {
+
+  0%,
+  100% {
+    opacity: 0.8;
+    filter: blur(14px) brightness(1.3);
+  }
+
+  50% {
+    opacity: 1;
+    filter: blur(16px) brightness(1.6);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-[#0a0e27];
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-cyan-500/30 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-cyan-500/50;
+}
+
+/* ==========================================
+   ADMIN THEME STYLES - Stripe Dashboard Inspired
+   ========================================== */
+
+/* Stripe Colors */
+:root {
+  --stripe-purple: #635BFF;
+  --stripe-purple-dark: #5851EA;
+  --stripe-purple-light: #7A73FF;
+  --stripe-dark: #0A2540;
+  --stripe-dark-secondary: #1A3A5C;
+  --stripe-gray-50: #F6F9FC;
+  --stripe-gray-100: #E3E8EE;
+  --stripe-gray-200: #C1C9D2;
+  --stripe-gray-400: #8792A2;
+  --stripe-gray-600: #545969;
+  --stripe-gray-900: #1A1F36;
+  --stripe-success: #00D4AA;
+  --stripe-warning: #FFB800;
+  --stripe-error: #FF5567;
+}
+
+/* Admin Layout Base */
+.admin-layout {
+  @apply min-h-screen;
+  background: var(--stripe-gray-50);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
+
+.admin-layout * {
+  @apply antialiased;
+}
+
+/* Admin Sidebar - Dark Stripe Style */
+.admin-sidebar {
+  @apply fixed left-0 top-0 h-screen w-64;
+  background: linear-gradient(180deg, var(--stripe-dark) 0%, #0D2E4D 100%);
+  box-shadow: 4px 0 24px rgba(10, 37, 64, 0.2);
+}
+
+.admin-sidebar-nav-item {
+  @apply flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-md mx-3 transition-all duration-200;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.admin-sidebar-nav-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.admin-sidebar-nav-item.active {
+  background: rgba(99, 91, 255, 0.2);
+  color: #fff;
+  border-left: 2px solid var(--stripe-purple-light);
+  margin-left: 0.65rem;
+  padding-left: 0.85rem;
+}
+
+/* Admin Cards - Stripe Style */
+.admin-card {
+  @apply bg-white rounded-lg p-6;
+  border: 1px solid var(--stripe-gray-100);
+  box-shadow: 0 2px 5px 0 rgba(50, 50, 93, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.07);
+}
+
+.admin-card:hover {
+  box-shadow: 0 7px 14px 0 rgba(50, 50, 93, 0.1), 0 3px 6px 0 rgba(0, 0, 0, 0.07);
+}
+
+.admin-card-header {
+  @apply text-sm font-semibold mb-4;
+  color: var(--stripe-gray-900);
+  letter-spacing: -0.01em;
+}
+
+.admin-card-body {
+  @apply text-sm;
+  color: var(--stripe-gray-600);
+}
+
+/* Admin Metric Cards - Stripe Style with Gradient Border */
+.admin-metric-card {
+  @apply bg-white rounded-lg p-5 relative;
+  border: 1px solid var(--stripe-gray-100);
+  box-shadow: 0 2px 5px 0 rgba(50, 50, 93, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.07);
+}
+
+.admin-metric-card::before {
+  content: '';
+  @apply absolute top-0 left-0 right-0 h-0.5 rounded-t-lg;
+}
+
+.admin-metric-card.blue::before {
+  background: linear-gradient(90deg, var(--stripe-purple) 0%, var(--stripe-purple-light) 100%);
+}
+
+.admin-metric-card.red::before {
+  background: linear-gradient(90deg, var(--stripe-error) 0%, #FF7A8A 100%);
+}
+
+.admin-metric-card.green::before {
+  background: linear-gradient(90deg, var(--stripe-success) 0%, #00E5BB 100%);
+}
+
+.admin-metric-card.purple::before {
+  background: linear-gradient(90deg, #8B5CF6 0%, #A78BFA 100%);
+}
+
+.admin-metric-card.yellow::before {
+  background: linear-gradient(90deg, var(--stripe-warning) 0%, #FFCA28 100%);
+}
+
+.admin-metric-value {
+  @apply text-2xl font-semibold mb-1;
+  color: var(--stripe-gray-900);
+  letter-spacing: -0.02em;
+}
+
+.admin-metric-label {
+  @apply text-xs font-medium uppercase tracking-wide;
+  color: var(--stripe-gray-400);
+}
+
+/* Admin Buttons - Stripe Style */
+.admin-btn {
+  @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-all duration-150;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+  @apply disabled:pointer-events-none disabled:opacity-50;
+}
+
+.admin-btn-primary {
+  @apply admin-btn text-white px-4 py-2;
+  background: var(--stripe-purple);
+  box-shadow: 0 2px 5px 0 rgba(99, 91, 255, 0.3);
+}
+
+.admin-btn-primary:hover {
+  background: var(--stripe-purple-dark);
+  box-shadow: 0 4px 8px 0 rgba(99, 91, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.admin-btn-secondary {
+  @apply admin-btn px-4 py-2;
+  background: #fff;
+  color: var(--stripe-gray-900);
+  border: 1px solid var(--stripe-gray-200);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.admin-btn-secondary:hover {
+  background: var(--stripe-gray-50);
+  border-color: var(--stripe-gray-400);
+}
+
+.admin-btn-ghost {
+  @apply admin-btn px-3 py-2;
+  color: var(--stripe-gray-600);
+}
+
+.admin-btn-ghost:hover {
+  background: var(--stripe-gray-50);
+  color: var(--stripe-gray-900);
+}
+
+.admin-btn-danger {
+  @apply admin-btn text-white px-4 py-2;
+  background: var(--stripe-error);
+  box-shadow: 0 2px 5px 0 rgba(255, 85, 103, 0.3);
+}
+
+.admin-btn-danger:hover {
+  background: #E8495A;
+}
+
+/* Admin Form Elements - Stripe Style */
+.admin-input {
+  @apply w-full px-3 py-2 text-sm rounded-md transition-all duration-150;
+  background: #fff;
+  color: var(--stripe-gray-900);
+  border: 1px solid var(--stripe-gray-200);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.admin-input::placeholder {
+  color: var(--stripe-gray-400);
+}
+
+.admin-input:focus {
+  @apply outline-none;
+  border-color: var(--stripe-purple);
+  box-shadow: 0 0 0 3px rgba(99, 91, 255, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.admin-input:disabled {
+  background: var(--stripe-gray-50);
+  color: var(--stripe-gray-400);
+  cursor: not-allowed;
+}
+
+.admin-input.error {
+  border-color: var(--stripe-error);
+}
+
+.admin-input.error:focus {
+  box-shadow: 0 0 0 3px rgba(255, 85, 103, 0.1);
+}
+
+.admin-label {
+  @apply block text-sm font-medium mb-1.5;
+  color: var(--stripe-gray-900);
+}
+
+.admin-input-hint {
+  @apply mt-1 text-xs;
+  color: var(--stripe-gray-400);
+}
+
+.admin-input-error {
+  @apply mt-1 text-xs;
+  color: var(--stripe-error);
+}
+
+/* Admin Select - Stripe Style */
+.admin-select {
+  @apply admin-input appearance-none bg-no-repeat cursor-pointer;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%238792A2' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-size: 1.25em 1.25em;
+  padding-right: 2.5rem;
+}
+
+/* Admin Badges - Stripe Style */
+.admin-badge {
+  @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium;
+}
+
+.admin-badge-blue {
+  @apply admin-badge;
+  background: rgba(99, 91, 255, 0.1);
+  color: var(--stripe-purple);
+}
+
+.admin-badge-green {
+  @apply admin-badge;
+  background: rgba(0, 212, 170, 0.1);
+  color: #00A67E;
+}
+
+.admin-badge-red {
+  @apply admin-badge;
+  background: rgba(255, 85, 103, 0.1);
+  color: var(--stripe-error);
+}
+
+.admin-badge-yellow {
+  @apply admin-badge;
+  background: rgba(255, 184, 0, 0.1);
+  color: #B78600;
+}
+
+.admin-badge-gray {
+  @apply admin-badge;
+  background: var(--stripe-gray-100);
+  color: var(--stripe-gray-600);
+}
+
+.admin-badge-purple {
+  @apply admin-badge;
+  background: rgba(139, 92, 246, 0.1);
+  color: #7C3AED;
+}
+
+/* Admin Tags/Chips */
+.admin-chip {
+  @apply inline-flex items-center gap-1.5 px-3 py-1 bg-[#F3F4F6] text-[#111827] text-sm rounded-full;
+}
+
+.admin-chip-close {
+  @apply w-4 h-4 text-[#6B7280] hover:text-[#111827] cursor-pointer transition-colors;
+}
+
+/* Admin Table */
+.admin-table {
+  @apply w-full text-sm;
+}
+
+.admin-table thead {
+  @apply border-b border-[#E5E7EB];
+}
+
+.admin-table th {
+  @apply px-4 py-3 text-left text-xs font-medium text-[#6B7280] uppercase tracking-wider;
+}
+
+.admin-table tbody tr {
+  @apply border-b border-[#E5E7EB] hover:bg-[#F9FAFC] transition-colors;
+}
+
+.admin-table td {
+  @apply px-4 py-4 text-[#111827];
+}
+
+/* Admin Toggle Pills */
+.admin-toggle-group {
+  @apply inline-flex bg-[#F3F4F6] rounded-lg p-1;
+}
+
+.admin-toggle-pill {
+  @apply px-4 py-1.5 text-sm font-medium text-[#6B7280] rounded-md transition-all duration-200;
+}
+
+.admin-toggle-pill:hover {
+  @apply text-[#111827];
+}
+
+.admin-toggle-pill.active {
+  @apply bg-white text-[#111827] shadow-sm;
+}
+
+/* Admin Header */
+.admin-header {
+  @apply h-16 bg-white border-b border-[#E5E7EB] flex items-center justify-between px-6;
+}
+
+.admin-page-title {
+  @apply text-2xl font-semibold text-[#111827];
+}
+
+/* Admin Progress Bar */
+.admin-progress {
+  @apply w-full h-2 bg-[#E5E7EB] rounded-full overflow-hidden;
+}
+
+.admin-progress-bar {
+  @apply h-full bg-[#4D5BF9] rounded-full transition-all duration-300;
+}
+
+/* Admin Data Visualization */
+.admin-bar {
+  @apply bg-gradient-to-t from-[#4D5BF9] to-[#6B77FA] rounded-t;
+}
+
+/* Admin Scrollbar */
+.admin-layout ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.admin-layout ::-webkit-scrollbar-track {
+  @apply bg-[#F3F4F6];
+}
+
+.admin-layout ::-webkit-scrollbar-thumb {
+  @apply bg-[#D1D5DB] rounded-full;
+}
+
+.admin-layout ::-webkit-scrollbar-thumb:hover {
+  @apply bg-[#9CA3AF];
+}
+
+/* Admin Loading Spinner */
+.admin-spinner {
+  @apply w-5 h-5 border-2 border-[#E5E7EB] border-t-[#4D5BF9] rounded-full animate-spin;
+}
+
+/* Admin Empty State */
+.admin-empty-state {
+  @apply flex flex-col items-center justify-center py-12 text-center;
+}
+
+.admin-empty-state-icon {
+  @apply w-12 h-12 text-[#D1D5DB] mb-4;
+}
+
+.admin-empty-state-title {
+  @apply text-lg font-medium text-[#111827] mb-1;
+}
+
+.admin-empty-state-text {
+  @apply text-sm text-[#6B7280];
+}
+
+/* Anti-download and protection utilities */
+.no-download {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.img-protection-wrapper {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.img-protection-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* ========================================
+   MICRO-INTERACTIONS & LIVELY EFFECTS
+   ======================================== */
+
+/* Subtle hover lift effect */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Gentle scale on hover */
+.hover-scale {
+  transition: transform 0.2s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+/* Interactive card with glow */
+.interactive-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.interactive-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 30px -10px rgba(14, 165, 233, 0.3);
+  border-color: rgba(14, 165, 233, 0.3);
+}
+
+/* Shimmer/shine effect on hover */
+.shimmer-on-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-on-hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent);
+  transition: left 0.5s ease;
+}
+
+.shimmer-on-hover:hover::after {
+  left: 100%;
+}
+
+/* Gentle breathing/pulse effect */
+.animate-breathe {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+@keyframes breathe {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.02);
+    opacity: 0.9;
+  }
+}
+
+/* Subtle floating animation */
+.animate-float-subtle {
+  animation: float-subtle 4s ease-in-out infinite;
+}
+
+@keyframes float-subtle {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Icon bounce on hover */
+.icon-bounce-hover:hover {
+  animation: icon-bounce 0.4s ease;
+}
+
+@keyframes icon-bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  25% {
+    transform: translateY(-3px);
+  }
+
+  50% {
+    transform: translateY(0);
+  }
+
+  75% {
+    transform: translateY(-1px);
+  }
+}
+
+/* Glow pulse for active elements */
+.glow-pulse-active {
+  animation: glow-pulse-active 2s ease-in-out infinite;
+}
+
+@keyframes glow-pulse-active {
+
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(14, 165, 233, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.5), 0 0 40px rgba(14, 165, 233, 0.2);
+  }
+}
+
+/* Button press effect */
+.press-effect:active {
+  transform: scale(0.97);
+}
+
+/* Staggered fade in for lists */
+.stagger-fade-in>* {
+  opacity: 0;
+  animation: stagger-fade 0.4s ease forwards;
+}
+
+.stagger-fade-in>*:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.stagger-fade-in>*:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.stagger-fade-in>*:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.stagger-fade-in>*:nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+.stagger-fade-in>*:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+.stagger-fade-in>*:nth-child(6) {
+  animation-delay: 0.3s;
+}
+
+@keyframes stagger-fade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* Gradient border animation */
+.animated-gradient-border {
+  position: relative;
+  background: linear-gradient(#0d1321, #0d1321) padding-box,
+    linear-gradient(135deg, #06b6d4, #3b82f6, #8b5cf6, #06b6d4) border-box;
+  border: 2px solid transparent;
+  background-size: 100% 100%, 300% 300%;
+  animation: gradient-border-shift 4s ease infinite;
+}
+
+@keyframes gradient-border-shift {
+
+  0%,
+  100% {
+    background-position: 0% 0%, 0% 50%;
+  }
+
+  50% {
+    background-position: 0% 0%, 100% 50%;
+  }
+}
+
+/* Smooth focus ring */
+.focus-ring-smooth:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.3), 0 0 0 4px rgba(14, 165, 233, 0.1);
+}
+
+/* Loading dots animation */
+.loading-dots::after {
+  content: '';
+  animation: loading-dots 1.4s infinite;
+}
+
+@keyframes loading-dots {
+
+  0%,
+  20% {
+    content: '.';
+  }
+
+  40% {
+    content: '..';
+  }
+
+  60%,
+  100% {
+    content: '...';
+  }
+}

@@ -1,0 +1,14 @@
+A professional architectural rendering of a commercial building showcasing [BUILDING_TYPE] with [ARCHITECTURAL_STYLE] design. The structure presents [MATERIALS] facade with modern detailing.
+
+Fidelity Requirements:
+- Preserve the exact camera angle, geometry, and image dimensions
+- NO_ZOOM, NO_TILT, NO_CROP, MAINTAIN_RESOLUTION
+- Midday neutral lighting for professional documentation
+- Remove all 3D software guide lines and artifacts (orange, green, blue, black outlines)
+- Professional glazing and curtain wall systems
+- Accurate building proportions and scale
+- Urban context with appropriate surrounding structures
+- [TREE_GROUP] for soft landscaping
+- High resolution, architectural presentation quality
+- Professional architectural photography style
+

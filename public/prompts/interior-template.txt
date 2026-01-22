@@ -1,0 +1,13 @@
+A high-fidelity architectural interior rendering of [DESCRIPTION]. The interior features [MATERIALS] and [COLOR_SCHEME]. Natural light streams through windows showing [WINDOW_VIEW].
+
+Fidelity Requirements:
+- Preserve the exact camera angle, geometry, and image dimensions
+- NO_ZOOM, NO_TILT, NO_CROP, MAINTAIN_RESOLUTION
+- Midday neutral lighting through windows
+- Remove all 3D software guide lines and artifacts (orange, green, blue, black outlines)
+- Realistic furniture, fixtures, and finishes
+- Accurate perspective and proportions
+- Natural window light creating realistic shadows
+- High resolution, photorealistic quality
+- Architectural photography style
+
