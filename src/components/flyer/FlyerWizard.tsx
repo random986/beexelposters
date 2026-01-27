@@ -32,6 +32,10 @@ export function FlyerWizard() {
         exportFormat: 'png',
     })
 
+    const [error, setError] = useState<string | null>(null)
+    const [jobId, setJobId] = useState<string | null>(null)
+    const [generatedImage, setGeneratedImage] = useState<string | null>(null)
+
     const updateState = (updates: Partial<FlyerState>) => {
         setState(prev => ({ ...prev, ...updates }))
     }
@@ -41,6 +45,62 @@ export function FlyerWizard() {
             ...prev,
             content: { ...prev.content, [field]: value }
         }))
+    }
+
+    const checkJobStatus = async (id: string) => {
+        try {
+            const response = await fetch(`/api/v2/render/status?jobId=${id}`)
+            const data = await response.json()
+
+            if (data.success) {
+                if (data.status === 'success' && data.resultUrls && data.resultUrls.length > 0) {
+                    setGeneratedImage(data.resultUrls[0])
+                    setIsGenerating(false)
+                } else if (data.status === 'failed') {
+                    setError(data.error || 'Generation failed')
+                    setIsGenerating(false)
+                } else {
+                    // Still processing, poll again in 2s
+                    setTimeout(() => checkJobStatus(id), 2000)
+                }
+            } else {
+                setError(data.msg || 'Failed to check status')
+                setIsGenerating(false)
+            }
+        } catch (err) {
+            console.error('Status check error:', err)
+            // Don't fail immediately on network error, retry once or twice could be better but keeping simple
+            setTimeout(() => checkJobStatus(id), 2000)
+        }
+    }
+
+    const handleGenerate = async () => {
+        setIsGenerating(true)
+        setError(null)
+        setGeneratedImage(null)
+
+        try {
+            const response = await fetch('/api/v2/flyer/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(state),
+            })
+
+            const data = await response.json()
+
+            if (data.success && data.jobId) {
+                setJobId(data.jobId)
+                // Start polling
+                checkJobStatus(data.jobId)
+            } else {
+                setError(data.msg || 'Failed to start generation')
+                setIsGenerating(false)
+            }
+        } catch (err) {
+            console.error('Generation error:', err)
+            setError('Network error. Please try again.')
+            setIsGenerating(false)
+        }
     }
 
     const nextStep = () => {
@@ -290,34 +350,75 @@ export function FlyerWizard() {
                     {currentStep === 4 && (
                         <div className="space-y-8">
                             <div className="text-center space-y-4">
-                                <h1 className="text-4xl md:text-5xl font-clash-display font-medium text-[#1A1A1A]">Generate Your Poster</h1>
-                                <p className="text-xl text-gray-500">Click below to create your professional design</p>
+                                <h1 className="text-4xl md:text-5xl font-clash-display font-medium text-[#1A1A1A]">
+                                    {generatedImage ? 'Your Poster is Ready!' : isGenerating ? 'Creating Your Masterpiece...' : 'Generate Your Poster'}
+                                </h1>
+                                <p className="text-xl text-gray-500">
+                                    {generatedImage ? 'Download or regenerate below' : isGenerating ? 'Please wait while our AI designs your poster' : 'Click below to create your professional design'}
+                                </p>
                             </div>
 
                             <div className="max-w-xl mx-auto text-center py-12">
-                                <Button
-                                    onClick={() => {
-                                        console.log('Generating with state:', state)
-                                        // TODO: Implement generation logic
-                                    }}
-                                    className="h-20 px-16 bg-[#1A1A1A] text-white text-xl font-bold rounded-full hover:bg-black hover:scale-105 hover:shadow-2xl transition-all duration-300"
-                                >
-                                    <Sparkles className="w-6 h-6 mr-3" />
-                                    Generate Poster
-                                </Button>
-
-                                {/* Summary */}
-                                <div className="mt-16 p-8 bg-gray-50 border border-gray-100 rounded-[32px] text-left shadow-lg">
-                                    <h3 className="font-clash-display font-medium text-xl text-[#1A1A1A] mb-6">Your Design Summary:</h3>
-                                    <div className="space-y-3 text-sm text-gray-600">
-                                        <p><strong className="text-[#1A1A1A]">Type:</strong> {PURPOSE_OPTIONS.find(o => o.id === state.purpose)?.label}</p>
-                                        <p><strong className="text-[#1A1A1A]">Format:</strong> {FORMAT_OPTIONS.find(o => o.id === state.format)?.label}</p>
-                                        <p><strong className="text-[#1A1A1A]">Industry:</strong> {INDUSTRY_OPTIONS.find(o => o.id === state.industry)?.label}</p>
-                                        <p><strong className="text-[#1A1A1A]">Headline:</strong> {state.content.headline}</p>
-                                        <p><strong className="text-[#1A1A1A]">Style:</strong> {VISUAL_STYLE_OPTIONS.find(o => o.id === state.visualStyle)?.label}</p>
-                                        <p><strong className="text-[#1A1A1A]">Colors:</strong> {COLOR_THEME_OPTIONS.find(o => o.id === state.colorTheme)?.label}</p>
+                                {error && (
+                                    <div className="mb-8 p-4 bg-red-50 text-red-600 rounded-xl border border-red-100">
+                                        {error}
                                     </div>
-                                </div>
+                                )}
+
+                                {generatedImage ? (
+                                    <div className="space-y-8">
+                                        <div className="rounded-[32px] overflow-hidden shadow-2xl border-4 border-white">
+                                            <img src={generatedImage} alt="Generated Poster" className="w-full h-auto" />
+                                        </div>
+                                        <div className="flex gap-4 justify-center">
+                                            <Button
+                                                onClick={() => window.open(generatedImage, '_blank')}
+                                                className="h-14 px-8 bg-[#1A1A1A] text-white rounded-full font-bold hover:bg-black transition-all"
+                                            >
+                                                Download High-Res
+                                            </Button>
+                                            <Button
+                                                onClick={handleGenerate}
+                                                variant="outline"
+                                                className="h-14 px-8 border-2 border-gray-200 text-gray-700 rounded-full font-bold hover:border-[#1A1A1A] hover:text-[#1A1A1A] transition-all"
+                                            >
+                                                Regenerate
+                                            </Button>
+                                        </div>
+                                    </div>
+                                ) : isGenerating ? (
+                                    <div className="py-12 flex flex-col items-center justify-center space-y-6">
+                                        <div className="relative w-24 h-24">
+                                            <div className="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
+                                            <div className="absolute inset-0 border-4 border-[#1A1A1A] rounded-full border-t-transparent animate-spin"></div>
+                                        </div>
+                                        <p className="text-gray-500 animate-pulse">Analyzing requirements & designing layout...</p>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <Button
+                                            onClick={handleGenerate}
+                                            disabled={isGenerating}
+                                            className="h-20 px-16 bg-[#1A1A1A] text-white text-xl font-bold rounded-full hover:bg-black hover:scale-105 hover:shadow-2xl transition-all duration-300"
+                                        >
+                                            <Sparkles className="w-6 h-6 mr-3" />
+                                            Generate Poster
+                                        </Button>
+
+                                        {/* Summary */}
+                                        <div className="mt-16 p-8 bg-gray-50 border border-gray-100 rounded-[32px] text-left shadow-lg">
+                                            <h3 className="font-clash-display font-medium text-xl text-[#1A1A1A] mb-6">Your Design Summary:</h3>
+                                            <div className="space-y-3 text-sm text-gray-600">
+                                                <p><strong className="text-[#1A1A1A]">Type:</strong> {PURPOSE_OPTIONS.find(o => o.id === state.purpose)?.label}</p>
+                                                <p><strong className="text-[#1A1A1A]">Format:</strong> {FORMAT_OPTIONS.find(o => o.id === state.format)?.label}</p>
+                                                <p><strong className="text-[#1A1A1A]">Industry:</strong> {INDUSTRY_OPTIONS.find(o => o.id === state.industry)?.label}</p>
+                                                <p><strong className="text-[#1A1A1A]">Headline:</strong> {state.content.headline}</p>
+                                                <p><strong className="text-[#1A1A1A]">Style:</strong> {VISUAL_STYLE_OPTIONS.find(o => o.id === state.visualStyle)?.label}</p>
+                                                <p><strong className="text-[#1A1A1A]">Colors:</strong> {COLOR_THEME_OPTIONS.find(o => o.id === state.colorTheme)?.label}</p>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
                     )}

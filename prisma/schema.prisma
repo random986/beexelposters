@@ -98,7 +98,7 @@ model Job {
   userId        String
   prompt        String?  @db.Text
   enhancedPrompt String? @db.Text
-  model         String?  @default("nano-banana-pro") // flux-pro, nano-banana-pro
+  // model         String?  @default("nano-banana-pro") // flux-pro, nano-banana-pro
   aspect        String?
   resolution    String?
   mode          String?
@@ -197,3 +197,29 @@ model CodeUsageHistory {
   @@map("code_usage_history")
 }
 
+// System Preprompts for AI generation
+model Preprompt {
+  id        String   @id @default(cuid())
+  key       String   @unique  // e.g., "design_quality", "color_guidance", "structure_adherence"
+  name      String   // Human-readable name
+  content   String   @db.Text
+  priority  Int      @default(0)  // Higher = more important in prompt ordering
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("preprompts")
+}
+
+// Prompt Templates for Poster Generation
+model PromptTemplate {
+  id          String   @id @default(cuid())
+  name        String   @unique // Maps to visualStyle (e.g., "sport", "corporate", "party")
+  description String?
+  template    String   @db.Text
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("prompt_templates")
+}

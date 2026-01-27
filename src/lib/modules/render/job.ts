@@ -79,6 +79,7 @@ export async function createRenderJob(data: {
       aspectRatio: data.aspect,
       resolution: data.resolution,
       model: data.model === 'basic' ? 'flux-2/pro-image-to-image' : 'nano-banana-pro',
+      strength: imageUrls.length > 0 ? 0.85 : undefined, // High adherence when images provided
     })
 
     if (!taskResult.success || !taskResult.taskId) {

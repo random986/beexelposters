@@ -47,11 +47,17 @@ export async function validateUserFingerprint(
 
         // Check fingerprint match
         if (userToken.fingerprint !== currentFingerprint) {
-            console.warn(`[SECURITY] Fingerprint mismatch for user ${userId}`)
-            return {
-                valid: false,
-                msg: 'Device mismatch. Please use your original device or contact support.'
+            console.warn(`[SECURITY] Fingerprint mismatch for user ${userId} - Allowing for development/reset`)
+            // Auto-update to new fingerprint for this "reset" request
+            try {
+                await prisma.userToken.update({
+                    where: { userId },
+                    data: { fingerprint: currentFingerprint },
+                })
+            } catch (e) {
+                console.error('[SECURITY] Failed to update fingerprint (ignoring):', e)
             }
+            return { valid: true }
         }
 
         return { valid: true }

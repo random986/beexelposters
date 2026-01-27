@@ -14,6 +14,7 @@ interface NanoBananaTaskParams {
   outputFormat?: string
   callbackUrl?: string
   model?: string
+  strength?: number // Image adherence strength (0.0-1.0, higher = more adherence)
 }
 
 /**
@@ -76,20 +77,32 @@ export async function createNanoBananaTask(params: NanoBananaTaskParams): Promis
     // Different models use different input field names
     const isFluxModel = params.model?.includes('flux')
 
-    const requestBody = {
+    const requestBody: any = {
       model: params.model || 'nano-banana-pro',
       callBackUrl: params.callbackUrl || undefined,
       input: {
         prompt: params.prompt,
-        // flux-2/pro-image-to-image uses 'input_urls', nano-banana-pro uses 'image_input'
-        ...(isFluxModel
-          ? { input_urls: [params.imageUrls[0]] } // Flux takes an array with single URL
-          : { image_input: params.imageUrls }     // Nano Banana takes an array
-        ),
         aspect_ratio: mapAspectRatio(params.aspectRatio),
         resolution: normalizeResolution(params.resolution),
         output_format: params.outputFormat || 'png',
       },
+    }
+
+    // Only add image inputs if we have images (Flux-2 supports image-to-image, Nano supports both)
+    if (params.imageUrls && params.imageUrls.length > 0) {
+      if (isFluxModel) {
+        requestBody.input.input_urls = [params.imageUrls[0]]
+        // Add strength for image-to-image control (higher = more adherence to input)
+        if (params.strength !== undefined) {
+          requestBody.input.strength = params.strength
+        }
+      } else {
+        requestBody.input.image_input = params.imageUrls
+        // Add strength for image-to-image control (higher = more adherence to input)
+        if (params.strength !== undefined) {
+          requestBody.input.strength = params.strength
+        }
+      }
     }
 
     console.log('[KIE-AI] Creating task...', {
